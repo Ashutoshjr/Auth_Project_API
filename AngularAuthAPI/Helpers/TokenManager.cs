@@ -11,9 +11,11 @@ namespace AuthProjectAPI.Helpers
 {
     public class TokenManager : ITokenManager
     {
-       
-        public TokenManager()
+        
+        private readonly IConfiguration _configuration;
+        public TokenManager(IConfiguration configuration)
         {
+            _configuration = configuration;
         }
         /// <summary>
         /// Token is madeup of 3 things
@@ -26,7 +28,7 @@ namespace AuthProjectAPI.Helpers
         public string CreateJWT(User userObj)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("my unique secret key for token generation...");
+            var key = Encoding.ASCII.GetBytes(_configuration["SecretKey"]);
 
             //identity or payload
             var identity = new ClaimsIdentity(new Claim[]

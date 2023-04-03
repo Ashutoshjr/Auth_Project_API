@@ -21,14 +21,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnString"));
 });
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ITokenManager, TokenManager>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<ITokenManager, TokenManager>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
+
 
 builder.Services.AddAuthentication(x =>
 {
@@ -41,7 +42,7 @@ builder.Services.AddAuthentication(x =>
       x.TokenValidationParameters = new TokenValidationParameters
       {
           ValidateIssuerSigningKey = true,
-          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("my unique secret key for token generation...")),
+          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["SecretKey"])),
           ValidateAudience = false,
           ValidateIssuer = false
       };
