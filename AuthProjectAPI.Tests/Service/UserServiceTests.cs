@@ -34,7 +34,7 @@ namespace AuthProjectAPI.Tests.Repository
             var repositoryMock = new Mock<IUserRepository>();
             Mock<ITokenManager>? tokenMock = new Mock<ITokenManager>();
             //Arrange
-            UserService userService = new UserService(repositoryMock.Object, tokenMock.Object);
+            UserService userService = new UserService(repositoryMock.Object);
 
             //Act
             var user = await userService.Authenticate(expectedEmailObj);
