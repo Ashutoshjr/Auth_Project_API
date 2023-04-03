@@ -30,7 +30,7 @@ namespace AuthProjectAPI.Tests.Repository
 
 
         [Test]
-        public async Task Authenticate_CorrectPassForExistingUser_ReturnUserForCorrectEmail()
+        public async Task Authenticate_CorrectPassForExistingUser_ReturnUserForCorrectData()
         {
             //Arrange
             var expectedUserObj = new User { Email = "ashutoshtayade3@gmail.com", Password = "Ashutosh@123" };
@@ -50,6 +50,30 @@ namespace AuthProjectAPI.Tests.Repository
             
             Assert.That(actualUser.Email, Is.EqualTo(expectedUserObj.Email));
         
+        }
+
+
+        [Test]
+        public async Task Authenticate_IncorrectPassForExistingUser_ReturnUserForIncorrectData()
+        {
+            //Arrange
+            var expectedUserObj = new User { Email = "ashutosh@gmail.com", Password = "test@123" };
+
+            var userRepository = new Mock<IUserRepository>();
+            userRepository.Setup(_ => _.Authenticate(expectedUserObj)).ReturnsAsync(UserMockData.AuthUser(expectedUserObj.Email, expectedUserObj.Password));
+
+            var loggerService = new Mock<ILogger<UserController>>();
+            var tokenService = new Mock<ITokenManager>();
+
+            var userData = new UserService(userRepository.Object);
+
+            //Act
+            var actualUser = await userData.Authenticate(expectedUserObj);
+
+            //Assert
+
+            Assert.AreNotEqual(actualUser.Email, expectedUserObj.Email);
+
         }
 
     }
