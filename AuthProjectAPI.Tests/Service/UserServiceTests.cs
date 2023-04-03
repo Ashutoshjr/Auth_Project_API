@@ -4,7 +4,11 @@ using AuthProjectAPI.Helpers;
 using AuthProjectAPI.Models;
 using AuthProjectAPI.Repository;
 using AuthProjectAPI.Service;
+using AuthProjectAPI.Tests.MockData;
+
+using Castle.Core.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -28,20 +32,23 @@ namespace AuthProjectAPI.Tests.Repository
         [Test]
         public async Task Authenticate_CorrectPassForExistingUser_ReturnUserForCorrectEmail()
         {
-
-            var expectedEmailObj = new User { Email = "ashutoshtayade3@gmail.com", Password = "Ashutosh@123" };
-
-            var repositoryMock = new Mock<IUserRepository>();
-            Mock<ITokenManager>? tokenMock = new Mock<ITokenManager>();
             //Arrange
-            UserService userService = new UserService(repositoryMock.Object);
+            var expectedUserObj = new User { Email = "ashutoshtayade3@gmail.com", Password = "Ashutosh@123" };
+
+            var userRepository = new Mock<IUserRepository>();
+            userRepository.Setup(_ => _.Authenticate(expectedUserObj)).ReturnsAsync(UserMockData.AuthUser(expectedUserObj.Email, expectedUserObj.Password));
+
+            var loggerService = new Mock<ILogger<UserController>>();
+            var tokenService = new Mock<ITokenManager>();
+
+            var userData = new UserService(userRepository.Object);
 
             //Act
-            var user = await userService.Authenticate(expectedEmailObj);
+            var actualUser = await userData.Authenticate(expectedUserObj);
 
             //Assert
-            string actualEmail = user.Email;
-            Assert.AreEqual(expectedEmailObj.Email, actualEmail);
+            
+            Assert.That(actualUser.Email, Is.EqualTo(expectedUserObj.Email));
         
         }
 
