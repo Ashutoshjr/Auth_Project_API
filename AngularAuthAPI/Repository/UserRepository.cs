@@ -1,25 +1,22 @@
-﻿using AngularAuthAPI.Context;
-using AngularAuthAPI.Helpers;
-using AngularAuthAPI.Models;
-using AngularAuthAPI.Models.Dto;
+﻿using AuthProjectAPI.Context;
+using AuthProjectAPI.Helpers;
+using AuthProjectAPI.Models;
+using AuthProjectAPI.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 
-namespace AngularAuthAPI.Repository
+namespace AuthProjectAPI.Repository
 {
     public class UserRepository : IUserRepository
     {
 
         private readonly AppDbContext _context;
-        private readonly IConfiguration _configuration;
 
-
-        public UserRepository(AppDbContext appDbContext, IConfiguration configuration)
+        public UserRepository(AppDbContext appDbContext)
         {
             _context = appDbContext;
-            _configuration = configuration;
         }
 
         public async Task<User> Authenticate(User userobj)

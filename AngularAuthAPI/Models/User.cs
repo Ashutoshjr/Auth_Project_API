@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AngularAuthAPI.Models
+namespace AuthProjectAPI.Models
 {
     public class User
     {

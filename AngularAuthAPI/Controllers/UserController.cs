@@ -1,8 +1,9 @@
-﻿using AngularAuthAPI.Context;
-using AngularAuthAPI.Helpers;
-using AngularAuthAPI.Models;
-using AngularAuthAPI.Models.Dto;
-using AngularAuthAPI.Repository;
+﻿using AuthProjectAPI.Context;
+using AuthProjectAPI.Helpers;
+using AuthProjectAPI.Models;
+using AuthProjectAPI.Models.Dto;
+using AuthProjectAPI.Repository;
+using AuthProjectAPI.Service;
 using Azure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -10,20 +11,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
 
-namespace AngularAuthAPI.Controllers
+namespace AuthProjectAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-
-        private readonly IUserRepository _userRepository;
+        
+        private readonly ILogger<UserController> _logger;
+        private readonly IUserService _userService;
         private readonly ITokenManager _tokenManager;
 
-        public UserController(IUserRepository userRepository, ITokenManager tokenManager)
+        public UserController(IUserService userService, ILogger<UserController> logger, ITokenManager tokenManager)
         {
-            this._userRepository = userRepository;
-            this._tokenManager = tokenManager;
+            _userService = userService;
+            _logger = logger;
+            _tokenManager = tokenManager;
         }
 
 
@@ -34,17 +37,20 @@ namespace AngularAuthAPI.Controllers
 
             try
             {
-                var userResult = await _userRepository.Authenticate(userobj);
+                var userResult = await _userService.Authenticate(userobj);
+
                 if (userResult is not null)
                 {
                     userobj.Token = _tokenManager.CreateJWT(userResult);
-                    return Ok(new { Token = userobj.Token, Message = "Login Successfull" });
+                    return Ok(new { Message = "User !", Token = userobj.Token, StatusCode = StatusCodes.Status200OK });
                 }
+
                 return BadRequest(new { Message = "User not found!", Token = "" });
+
             }
             catch (Exception ex)
             {
-
+                _logger.LogError(ex.Message, ex);
                 return BadRequest(new { Message = ex.Message, Token = "" });
             }
         }
@@ -53,22 +59,37 @@ namespace AngularAuthAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] User userobj)
         {
-            ArgumentNullException.ThrowIfNull(userobj, nameof(userobj));
+            try
+            {
+                ArgumentNullException.ThrowIfNull(userobj, nameof(userobj));
 
-            var response = await _userRepository.Register(userobj);
+                var response = await _userService.Register(userobj);
 
-            return Ok(new { Message = response.Message, status = response.StatusCode });
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw;
+            }
         }
 
         [Authorize]
         [HttpPut("update")]
         public async Task<IActionResult> Update([FromBody] User user)
         {
-            ArgumentNullException.ThrowIfNull(user, nameof(user));
-            var response = await _userRepository.Update(user);
+            try
+            {
+                ArgumentNullException.ThrowIfNull(user, nameof(user));
+                var response = await _userService.Update(user);
 
-            return Ok(new { Message = response.Message, status = response.StatusCode });
-
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw;
+            }
         }
 
 
@@ -76,25 +97,49 @@ namespace AngularAuthAPI.Controllers
         [HttpGet("get-user/{username}")]
         public async Task<User> GetUserByUserName(string username)
         {
-            var result = await _userRepository.GetUserByUserName(username);
-            return result;
+            try
+            {
+                var result = await _userService.GetUserByUserName(username);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw;
+            }
         }
 
         [Authorize]
         [HttpDelete("delete/{userId}")]
         public async Task<IActionResult> DeleteUser(int userId)
         {
-            var response = await _userRepository.DeleteById(userId);
-            return Ok(new { Message = response.Message, status = response.StatusCode });
+            try
+            {
+                var response = await _userService.DeleteById(userId);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw;
+            }
         }
 
 
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassowrd([FromBody] ResetPasswordDto resetPassword)
         {
-            ArgumentNullException.ThrowIfNull(resetPassword, nameof(resetPassword));
-            var response = await _userRepository.ResetPassowrd(resetPassword);
-            return Ok(new { Message = response.Message, status = response.StatusCode });
+            try
+            {
+                ArgumentNullException.ThrowIfNull(resetPassword, nameof(resetPassword));
+                var response = await _userService.ResetPassowrd(resetPassword);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw;
+            }
         }
     }
 }

@@ -1,13 +1,11 @@
 ﻿using AuthProjectAPI.Helpers;
-using AuthProjectAPI.Models;
 using AuthProjectAPI.Models.Dto;
-using Microsoft.AspNetCore.Mvc;
+using AuthProjectAPI.Models;
 
-namespace AuthProjectAPI.Repository
+namespace AuthProjectAPI.Service
 {
-    public interface IUserRepository
+    public interface IUserService
     {
-
         Task<User> GetById(int id);
 
         Task<User> GetUserByUserName(string name);
@@ -25,6 +23,5 @@ namespace AuthProjectAPI.Repository
         bool VerifyToken(string refreshToken);
 
         Task<ResponseMessage> ResetPassowrd(ResetPasswordDto resetPasswordDto);
-
     }
 }

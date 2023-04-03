@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace AngularAuthAPI.Migrations
+namespace AuthProjectAPI.Migrations
 {
     /// <inheritdoc />
     public partial class addedresetfield : Migration

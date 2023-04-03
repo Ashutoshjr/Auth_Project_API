@@ -1,7 +1,7 @@
-﻿using AngularAuthAPI.Models;
+﻿using AuthProjectAPI.Models;
 using System.Security.Claims;
 
-namespace AngularAuthAPI.Helpers
+namespace AuthProjectAPI.Helpers
 {
     public interface ITokenManager
     {

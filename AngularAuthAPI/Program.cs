@@ -1,6 +1,7 @@
-using AngularAuthAPI.Context;
-using AngularAuthAPI.Helpers;
-using AngularAuthAPI.Repository;
+using AuthProjectAPI.Context;
+using AuthProjectAPI.Helpers;
+using AuthProjectAPI.Repository;
+using AuthProjectAPI.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,8 +21,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnString"));
 });
 
-builder.Services.AddTransient<IUserRepository, UserRepository>();
-builder.Services.AddTransient<ITokenManager, TokenManager>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITokenManager, TokenManager>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddCors(options =>
 {
@@ -44,7 +46,6 @@ builder.Services.AddAuthentication(x =>
           ValidateIssuer = false
       };
   });
-
 
 
 var app = builder.Build();

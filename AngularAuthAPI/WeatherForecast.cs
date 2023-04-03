@@ -1,4 +1,4 @@
-namespace AngularAuthAPI
+namespace AuthProjectAPI
 {
     public class WeatherForecast
     {

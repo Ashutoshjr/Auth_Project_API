@@ -1,7 +1,7 @@
-﻿using AngularAuthAPI.Models;
+﻿using AuthProjectAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace AngularAuthAPI.Context
+namespace AuthProjectAPI.Context
 {
     public class AppDbContext : DbContext
     {

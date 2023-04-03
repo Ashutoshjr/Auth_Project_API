@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace AngularAuthAPI.Migrations
+namespace AuthProjectAPI.Migrations
 {
     /// <inheritdoc />
     public partial class v1 : Migration

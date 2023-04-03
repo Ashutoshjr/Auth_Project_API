@@ -2,7 +2,7 @@
 
 using System.Security.Cryptography;
 
-namespace AngularAuthAPI.Helpers
+namespace AuthProjectAPI.Helpers
 {
     public class PasswordHasher
     {

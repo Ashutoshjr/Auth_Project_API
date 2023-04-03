@@ -1,5 +1,5 @@
-﻿using AngularAuthAPI.Models;
-using AngularAuthAPI.Repository;
+﻿using AuthProjectAPI.Models;
+using AuthProjectAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -7,14 +7,13 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace AngularAuthAPI.Helpers
+namespace AuthProjectAPI.Helpers
 {
     public class TokenManager : ITokenManager
     {
-        private readonly IUserRepository _userRepository;
-        public TokenManager(IUserRepository userRepository)
+       
+        public TokenManager()
         {
-            _userRepository = userRepository;
         }
         /// <summary>
         /// Token is madeup of 3 things

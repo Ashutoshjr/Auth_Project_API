@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace AngularAuthAPI.Controllers
+namespace AuthProjectAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]

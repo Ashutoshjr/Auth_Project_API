@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Text;
 
-namespace AngularAuthAPI.Helpers
+namespace AuthProjectAPI.Helpers
 {
     public class Validator
     {
