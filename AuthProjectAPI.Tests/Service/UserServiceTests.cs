@@ -36,7 +36,7 @@ namespace AuthProjectAPI.Tests.Repository
             var expectedUserObj = new User { Email = "ashutoshtayade3@gmail.com", Password = "Ashutosh@123" };
 
             var userRepository = new Mock<IUserRepository>();
-            userRepository.Setup(_ => _.Authenticate(expectedUserObj)).ReturnsAsync(UserMockData.AuthUser(expectedUserObj.Email, expectedUserObj.Password));
+            userRepository.Setup(_ => _.AuthenticateAsync(expectedUserObj)).ReturnsAsync(UserMockData.AuthUser(expectedUserObj.Email, expectedUserObj.Password));
 
             var loggerService = new Mock<ILogger<UserController>>();
             var tokenService = new Mock<ITokenManager>();
@@ -44,7 +44,7 @@ namespace AuthProjectAPI.Tests.Repository
             var userData = new UserService(userRepository.Object);
 
             //Act
-            var actualUser = await userData.Authenticate(expectedUserObj);
+            var actualUser = await userData.AuthenticateAsync(expectedUserObj);
 
             //Assert
             
@@ -60,7 +60,7 @@ namespace AuthProjectAPI.Tests.Repository
             var expectedUserObj = new User { Email = "ashutosh@gmail.com", Password = "test@123" };
 
             var userRepository = new Mock<IUserRepository>();
-            userRepository.Setup(_ => _.Authenticate(expectedUserObj)).ReturnsAsync(UserMockData.AuthUser(expectedUserObj.Email, expectedUserObj.Password));
+            userRepository.Setup(_ => _.AuthenticateAsync(expectedUserObj)).ReturnsAsync(UserMockData.AuthUser(expectedUserObj.Email, expectedUserObj.Password));
 
             var loggerService = new Mock<ILogger<UserController>>();
             var tokenService = new Mock<ITokenManager>();
@@ -68,7 +68,7 @@ namespace AuthProjectAPI.Tests.Repository
             var userData = new UserService(userRepository.Object);
 
             //Act
-            var actualUser = await userData.Authenticate(expectedUserObj);
+            var actualUser = await userData.AuthenticateAsync(expectedUserObj);
 
             //Assert
 

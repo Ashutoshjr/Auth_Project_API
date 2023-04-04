@@ -19,10 +19,10 @@ namespace AuthProjectAPI.Repository
             _context = appDbContext;
         }
 
-        public async Task<User> Authenticate(User userobj)
+        public async Task<User> AuthenticateAsync(User userobj)
         {
 
-            var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(t => t.Email == userobj.Email);
+            var user = await _context.Users.FirstOrDefaultAsync(t => t.Email == userobj.Email);
             if (user is null)
                 return null;
 
@@ -33,17 +33,17 @@ namespace AuthProjectAPI.Repository
 
         }
 
-        public async Task<User> GetUserByUserName(string username)
+        public async Task<User> GetUserAsync(string username)
         {
             User user = null;
-            user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(t => t.UserName == username);
+            user = await _context.Users.FirstOrDefaultAsync(t => t.UserName == username);
             if (user is null)
                 throw new Exception("User not found");
 
             return user;
         }
 
-        public async Task<ResponseMessage> Register(User userobj)
+        public async Task<ResponseMessage> RegisterAsync(User userobj)
         {
             string result = string.Empty;
             try
@@ -79,19 +79,11 @@ namespace AuthProjectAPI.Repository
 
         private Task<bool> CheckEmailExist(string email) => _context.Users.AsNoTracking().AnyAsync(t => t.Email == email);
 
-        public async Task<IEnumerable<User>> GetAll() => await _context.Users.AsNoTracking().ToListAsync();
-
-        public async Task<User> GetById(int id) => await _context.Users.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id);
-
-        public async Task<User> GetUserName(string userName) => await _context.Users.FirstOrDefaultAsync(t => t.UserName == userName);
-
-        public bool VerifyToken(string refreshToken) => _context.Users.Any(t => t.Token == refreshToken);
-
-        public async Task<ResponseMessage> DeleteById(int id)
+        public async Task<ResponseMessage> DeleteAsync(int id)
         {
             try
             {
-                var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id);
+                var user = await _context.Users.FirstOrDefaultAsync(t => t.Id == id);
                 if (user is null)
                     return new ResponseMessage { Message = "User doesn't Exist", StatusCode = StatusCodes.Status404NotFound };
 
@@ -105,11 +97,11 @@ namespace AuthProjectAPI.Repository
             }
         }
 
-        public async Task<ResponseMessage> Update(User userObj)
+        public async Task<ResponseMessage> UpdateAsync(User userObj)
         {
             try
             {
-                var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(t => t.Id == userObj.Id);
+                var user = await _context.Users.FirstOrDefaultAsync(t => t.Id == userObj.Id);
                 if (user is null)
                     return new ResponseMessage { Message = "Email doesn't Exist", StatusCode = StatusCodes.Status404NotFound };
 
@@ -127,11 +119,11 @@ namespace AuthProjectAPI.Repository
             }
         }
 
-        public async Task<ResponseMessage> ResetPassowrd(ResetPasswordDto resetPassword)
+        public async Task<ResponseMessage> ResetPassowrdAsync(ResetPasswordDto resetPassword)
         {
             try
             {
-                var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(a => a.Email == resetPassword.Email);
+                var user = await _context.Users.FirstOrDefaultAsync(a => a.Email == resetPassword.Email);
                 if (user is null)
                     return new ResponseMessage { Message = "Email doesn't Exist", StatusCode = StatusCodes.Status404NotFound };
 

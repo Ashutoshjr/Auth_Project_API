@@ -31,18 +31,18 @@ namespace AuthProjectAPI.Controllers
 
 
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody] User userobj)
+        public async Task<IActionResult> AuthenticateAsync([FromBody] User userobj)
         {
             ArgumentNullException.ThrowIfNull(userobj, nameof(userobj));
 
             try
             {
-                var userResult = await _userService.Authenticate(userobj);
+                var userResult = await _userService.AuthenticateAsync(userobj);
 
                 if (userResult is not null)
                 {
                     userobj.Token = _tokenManager.CreateJWT(userResult);
-                    return Ok(new { Message = "User !", Token = userobj.Token, StatusCode = StatusCodes.Status200OK });
+                    return Ok(new { Message = "User Authenticated!", Token = userobj.Token, StatusCode = StatusCodes.Status200OK });
                 }
 
                 return BadRequest(new { Message = "User not found!", Token = "" });
@@ -57,13 +57,13 @@ namespace AuthProjectAPI.Controllers
 
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] User userobj)
+        public async Task<IActionResult> RegisterAsync([FromBody] User userobj)
         {
             try
             {
                 ArgumentNullException.ThrowIfNull(userobj, nameof(userobj));
 
-                var response = await _userService.Register(userobj);
+                var response = await _userService.RegisterAsync(userobj);
 
                 return Ok(response);
             }
@@ -76,12 +76,12 @@ namespace AuthProjectAPI.Controllers
 
         [Authorize]
         [HttpPut("update")]
-        public async Task<IActionResult> Update([FromBody] User user)
+        public async Task<IActionResult> UpdateAsync([FromBody] User user)
         {
             try
             {
                 ArgumentNullException.ThrowIfNull(user, nameof(user));
-                var response = await _userService.Update(user);
+                var response = await _userService.UpdateAsync(user);
 
                 return Ok(response);
             }
@@ -95,11 +95,14 @@ namespace AuthProjectAPI.Controllers
 
         [Authorize]
         [HttpGet("get-user/{username}")]
-        public async Task<User> GetUserByUserName(string username)
+        public async Task<User> GetUserAsync(string username)
         {
             try
             {
-                var result = await _userService.GetUserByUserName(username);
+                if(string.IsNullOrEmpty(username))
+                    throw new ArgumentNullException(nameof(username));
+
+                var result = await _userService.GetUserAsync(username);
                 return result;
             }
             catch (Exception ex)
@@ -111,11 +114,11 @@ namespace AuthProjectAPI.Controllers
 
         [Authorize]
         [HttpDelete("delete/{userId}")]
-        public async Task<IActionResult> DeleteUser(int userId)
+        public async Task<IActionResult> DeleteAsync(int userId)
         {
             try
             {
-                var response = await _userService.DeleteById(userId);
+                var response = await _userService.DeleteAsync(userId);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -127,12 +130,12 @@ namespace AuthProjectAPI.Controllers
 
 
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassowrd([FromBody] ResetPasswordDto resetPassword)
+        public async Task<IActionResult> ResetPassowrdAsync([FromBody] ResetPasswordDto resetPassword)
         {
             try
             {
                 ArgumentNullException.ThrowIfNull(resetPassword, nameof(resetPassword));
-                var response = await _userService.ResetPassowrd(resetPassword);
+                var response = await _userService.ResetPassowrdAsync(resetPassword);
                 return Ok(response);
             }
             catch (Exception ex)

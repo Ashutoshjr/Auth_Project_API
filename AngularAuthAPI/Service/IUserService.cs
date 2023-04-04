@@ -6,22 +6,17 @@ namespace AuthProjectAPI.Service
 {
     public interface IUserService
     {
-        Task<User> GetById(int id);
 
-        Task<User> GetUserByUserName(string name);
+        Task<User> GetUserAsync(string name);
 
-        Task<ResponseMessage> Update(User user);
+        Task<ResponseMessage> UpdateAsync(User user);
 
-        Task<ResponseMessage> DeleteById(int id);
+        Task<ResponseMessage> DeleteAsync(int id);
 
-        Task<User> Authenticate(User user);
+        Task<User> AuthenticateAsync(User user);
 
-        Task<ResponseMessage> Register(User user);
+        Task<ResponseMessage> RegisterAsync(User user);
 
-        Task<User> GetUserName(string userName);
-
-        bool VerifyToken(string refreshToken);
-
-        Task<ResponseMessage> ResetPassowrd(ResetPasswordDto resetPasswordDto);
+        Task<ResponseMessage> ResetPassowrdAsync(ResetPasswordDto resetPasswordDto);
     }
 }

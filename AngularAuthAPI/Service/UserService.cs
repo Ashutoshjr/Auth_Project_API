@@ -11,22 +11,17 @@ namespace AuthProjectAPI.Service
 
         public UserService(IUserRepository userRepository) => _userRepository = userRepository;
 
-        public async Task<User> Authenticate(User userObj) => await _userRepository.Authenticate(userObj);
+        public async Task<User> AuthenticateAsync(User userObj) => await _userRepository.AuthenticateAsync(userObj);
 
-        public Task<ResponseMessage> DeleteById(int id) => _userRepository.DeleteById(id);
+        public Task<ResponseMessage> DeleteAsync(int id) => _userRepository.DeleteAsync(id);
 
-        public Task<User> GetById(int id) => _userRepository.GetById(id);
+        public Task<User> GetUserAsync(string name) => _userRepository.GetUserAsync(name);
 
-        public Task<User> GetUserByUserName(string name) => ((_userRepository.GetUserName(name)));
+        public Task<ResponseMessage> RegisterAsync(User user) => _userRepository.RegisterAsync(user);
 
-        public Task<User> GetUserName(string userName) => (_userRepository.GetUserName(userName));
+        public Task<ResponseMessage> ResetPassowrdAsync(ResetPasswordDto resetPasswordDto) => _userRepository.ResetPassowrdAsync(resetPasswordDto);
 
-        public Task<ResponseMessage> Register(User user) => _userRepository.Register(user);
+        public Task<ResponseMessage> UpdateAsync(User user) => _userRepository.UpdateAsync(user);
 
-        public Task<ResponseMessage> ResetPassowrd(ResetPasswordDto resetPasswordDto) => _userRepository.ResetPassowrd(resetPasswordDto);
-
-        public Task<ResponseMessage> Update(User user) => _userRepository.Update(user);
-
-        public bool VerifyToken(string refreshToken) => _userRepository.VerifyToken(refreshToken);
     }
 }
