@@ -38,7 +38,7 @@ namespace AuthProjectAPI.Repository
             User user = null;
             user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(t => t.UserName == username);
             if (user is null)
-                throw new Exception("User");
+                throw new Exception("User not found");
 
             return user;
         }
