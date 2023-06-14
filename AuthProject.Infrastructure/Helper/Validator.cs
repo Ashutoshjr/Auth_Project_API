@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Text;
 
-namespace AuthProjectAPI.Helpers
+namespace AuthProject.Infrastructure.Helper
 {
     public class Validator
     {

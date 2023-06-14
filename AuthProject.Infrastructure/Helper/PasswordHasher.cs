@@ -2,12 +2,12 @@
 
 using System.Security.Cryptography;
 
-namespace AuthProjectAPI.Helpers
+namespace AuthProject.Infrastructure.Helper
 {
     public class PasswordHasher
     {
         private static RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-        private static int SaltSize =16;
+        private static int SaltSize = 16;
         private static int HashSize = 20;
         private static int Iterations = 10000;
 
@@ -18,14 +18,14 @@ namespace AuthProjectAPI.Helpers
             byte[] salt;
 
             rng.GetBytes(salt = new byte[SaltSize]);
-            var key = new  Rfc2898DeriveBytes(password, salt, Iterations);
+            var key = new Rfc2898DeriveBytes(password, salt, Iterations);
             var hash = key.GetBytes(HashSize);
 
             var hashBytes = new byte[SaltSize + HashSize];
-            Array.Copy(salt, 0, hashBytes,0,SaltSize);
+            Array.Copy(salt, 0, hashBytes, 0, SaltSize);
             Array.Copy(hash, 0, hashBytes, SaltSize, HashSize);
 
-           return Convert.ToBase64String(hashBytes);
+            return Convert.ToBase64String(hashBytes);
         }
 
 
@@ -34,7 +34,7 @@ namespace AuthProjectAPI.Helpers
 
             var hashBytes = Convert.FromBase64String(base64Hash);
             var salt = new byte[SaltSize];
-            Array.Copy(hashBytes,0, salt, 0, SaltSize);
+            Array.Copy(hashBytes, 0, salt, 0, SaltSize);
 
             var key = new Rfc2898DeriveBytes(password, salt, Iterations);
             byte[] hash = key.GetBytes(HashSize);
@@ -45,7 +45,7 @@ namespace AuthProjectAPI.Helpers
                 if (hashBytes[i + SaltSize] != hash[i])
                     return false;
 
-              
+
             }
             return true;
 

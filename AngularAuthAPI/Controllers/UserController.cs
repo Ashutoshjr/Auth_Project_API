@@ -1,9 +1,9 @@
-﻿using AuthProjectAPI.Context;
+﻿using AuthProject.Application.DTOs;
+using AuthProject.Application.Interface;
+using AuthProject.Domain;
+using AuthProjectAPI.Context;
 using AuthProjectAPI.Helpers;
-using AuthProjectAPI.Models;
-using AuthProjectAPI.Models.Dto;
 using AuthProjectAPI.Repository;
-using AuthProjectAPI.Service;
 using Azure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -31,18 +31,18 @@ namespace AuthProjectAPI.Controllers
 
 
         [HttpPost("authenticate")]
-        public async Task<IActionResult> AuthenticateAsync([FromBody] User userobj)
+        public async Task<IActionResult> AuthenticateAsync([FromBody] AuthenticateUserDto authUser)
         {
-            ArgumentNullException.ThrowIfNull(userobj, nameof(userobj));
+            ArgumentNullException.ThrowIfNull(authUser, nameof(authUser));
 
             try
             {
-                var userResult = await _userService.AuthenticateAsync(userobj);
+                var userResult = await _userService.AuthenticateAsync(authUser);
 
                 if (userResult is not null)
                 {
-                    userobj.Token = _tokenManager.CreateJWT(userResult);
-                    return Ok(new { Message = "User Authenticated!", Token = userobj.Token, StatusCode = StatusCodes.Status200OK });
+                    userResult.Token = _tokenManager.CreateJWT(userResult);
+                    return Ok(new { Message = "User Authenticated!", Token = userResult.Token, StatusCode = StatusCodes.Status200OK });
                 }
 
                 return BadRequest(new { Message = "User not found!", Token = "" });
@@ -57,13 +57,13 @@ namespace AuthProjectAPI.Controllers
 
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync([FromBody] User userobj)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterUserDto registerUser)
         {
             try
             {
-                ArgumentNullException.ThrowIfNull(userobj, nameof(userobj));
+                ArgumentNullException.ThrowIfNull(registerUser, nameof(registerUser));
 
-                var response = await _userService.RegisterAsync(userobj);
+                var response = await _userService.RegisterAsync(registerUser);
 
                 return Ok(response);
             }
@@ -76,12 +76,12 @@ namespace AuthProjectAPI.Controllers
 
         [Authorize]
         [HttpPut("update")]
-        public async Task<IActionResult> UpdateAsync([FromBody] User user)
+        public async Task<IActionResult> UpdateAsync([FromBody] UpdateUserDto updateUser)
         {
             try
             {
-                ArgumentNullException.ThrowIfNull(user, nameof(user));
-                var response = await _userService.UpdateAsync(user);
+                ArgumentNullException.ThrowIfNull(updateUser, nameof(updateUser));
+                var response = await _userService.UpdateAsync(updateUser);
 
                 return Ok(response);
             }
@@ -95,7 +95,7 @@ namespace AuthProjectAPI.Controllers
 
         [Authorize]
         [HttpGet("get-user/{username}")]
-        public async Task<User> GetUserAsync(string username)
+        public async Task<IActionResult> GetUserAsync(string username)
         {
             try
             {
@@ -103,7 +103,7 @@ namespace AuthProjectAPI.Controllers
                     throw new ArgumentNullException(nameof(username));
 
                 var result = await _userService.GetUserAsync(username);
-                return result;
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -130,7 +130,7 @@ namespace AuthProjectAPI.Controllers
 
 
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassowrdAsync([FromBody] ResetPasswordDto resetPassword)
+        public async Task<IActionResult> ResetPassowrdAsync([FromBody] ResetPassword resetPassword)
         {
             try
             {

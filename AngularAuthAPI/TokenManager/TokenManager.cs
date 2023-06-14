@@ -1,4 +1,5 @@
-﻿using AuthProjectAPI.Models;
+﻿using AuthProject.Application.DTOs;
+using AuthProject.Domain.Entities;
 using AuthProjectAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -25,7 +26,7 @@ namespace AuthProjectAPI.Helpers
         /// </summary>
         /// <param name="userObj"></param>
         /// <returns></returns>
-        public string CreateJWT(User userObj)
+        public string CreateJWT(UserDto userObj)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["SecretKey"]);

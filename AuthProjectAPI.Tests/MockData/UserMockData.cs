@@ -1,4 +1,4 @@
-﻿using AuthProjectAPI.Models;
+﻿using AuthProject.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +12,9 @@ namespace AuthProjectAPI.Tests.MockData
 
         public static User AuthUser(string email, string password)
         {
-           var user = MockUserList().FirstOrDefault(_user => _user.Email == email && _user.Password == password);
-           if(user == null) { return new User(); }
-           return user;
+            var user = MockUserList().FirstOrDefault(_user => _user.Email == email && _user.Password == password);
+            if (user == null) { return new User(); }
+            return user;
         }
 
         private static List<User> MockUserList()

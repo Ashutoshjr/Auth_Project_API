@@ -1,4 +1,5 @@
-﻿using AuthProjectAPI.Models;
+﻿
+using AuthProject.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuthProjectAPI.Context

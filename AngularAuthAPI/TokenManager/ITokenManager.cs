@@ -1,10 +1,10 @@
-﻿using AuthProjectAPI.Models;
+﻿using AuthProject.Application.DTOs;
 using System.Security.Claims;
 
 namespace AuthProjectAPI.Helpers
 {
     public interface ITokenManager
     {
-        string CreateJWT(User userObj);
+        string CreateJWT(UserDto userObj);
     }
 }

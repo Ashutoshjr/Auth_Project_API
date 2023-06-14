@@ -1,9 +1,7 @@
-﻿using AuthProjectAPI.Helpers;
-using AuthProjectAPI.Models;
-using AuthProjectAPI.Models.Dto;
-using Microsoft.AspNetCore.Mvc;
+﻿using AuthProject.Domain.Entities;
 
-namespace AuthProjectAPI.Repository
+
+namespace AuthProject.Domain.Repositories
 {
     public interface IUserRepository
     {
@@ -18,7 +16,7 @@ namespace AuthProjectAPI.Repository
 
         Task<ResponseMessage> RegisterAsync(User user);
 
-        Task<ResponseMessage> ResetPassowrdAsync(ResetPasswordDto resetPasswordDto);
+        Task<ResponseMessage> ResetPassowrdAsync(ResetPassword resetPasswordDto);
 
     }
 }

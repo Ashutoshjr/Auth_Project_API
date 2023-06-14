@@ -1,8 +1,9 @@
-﻿using AuthProjectAPI.Context;
-using AuthProjectAPI.Helpers;
-using AuthProjectAPI.Models;
-using AuthProjectAPI.Models.Dto;
-using Microsoft.AspNetCore.Mvc;
+﻿using AuthProject.Domain;
+using AuthProject.Domain.Entities;
+using AuthProject.Domain.Repositories;
+using AuthProject.Infrastructure.Helper;
+using AuthProjectAPI.Context;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
@@ -35,8 +36,7 @@ namespace AuthProjectAPI.Repository
 
         public async Task<User> GetUserAsync(string username)
         {
-            User user = null;
-            user = await _context.Users.FirstOrDefaultAsync(t => t.UserName == username);
+            var user = await _context.Users.FirstOrDefaultAsync(t => t.UserName == username);
             if (user is null)
                 throw new Exception("User not found");
 
@@ -91,23 +91,23 @@ namespace AuthProjectAPI.Repository
                 await _context.SaveChangesAsync();
                 return new ResponseMessage() { Message = "User deleted successfully!", StatusCode = StatusCodes.Status200OK };
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
         }
 
-        public async Task<ResponseMessage> UpdateAsync(User userObj)
+        public async Task<ResponseMessage> UpdateAsync(User updateUser)
         {
             try
             {
-                var user = await _context.Users.FirstOrDefaultAsync(t => t.Id == userObj.Id);
+                var user = await _context.Users.FirstOrDefaultAsync(t => t.Id == updateUser.Id);
                 if (user is null)
                     return new ResponseMessage { Message = "Email doesn't Exist", StatusCode = StatusCodes.Status404NotFound };
 
-                user.FirstName = userObj.FirstName;
-                user.LastName = userObj.LastName;
-                user.UserName = userObj.UserName;
+                user.FirstName = updateUser.FirstName;
+                user.LastName = updateUser.LastName;
+                user.UserName = updateUser.UserName;
 
                 _context.Entry(user).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
@@ -119,7 +119,7 @@ namespace AuthProjectAPI.Repository
             }
         }
 
-        public async Task<ResponseMessage> ResetPassowrdAsync(ResetPasswordDto resetPassword)
+        public async Task<ResponseMessage> ResetPassowrdAsync(ResetPassword resetPassword)
         {
             try
             {
