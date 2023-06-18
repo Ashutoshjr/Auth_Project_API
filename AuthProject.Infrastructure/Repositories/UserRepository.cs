@@ -17,14 +17,14 @@ namespace AuthProjectAPI.Repository
 
         public UserRepository(AppDbContext appDbContext)
         {
-            _context = appDbContext;
+            _context = appDbContext ?? throw new ArgumentNullException(nameof(appDbContext));
         }
 
         public async Task<User> AuthenticateAsync(User userobj)
         {
 
             var user = await _context.Users.FirstOrDefaultAsync(t => t.Email == userobj.Email);
-            if (user is null)
+            if (user == null)
                 return null;
 
             if (!PasswordHasher.VerifyPassword(userobj.Password, user.Password))
@@ -37,7 +37,7 @@ namespace AuthProjectAPI.Repository
         public async Task<User> GetUserAsync(string username)
         {
             var user = await _context.Users.FirstOrDefaultAsync(t => t.UserName == username);
-            if (user is null)
+            if (user == null)
                 throw new Exception("User not found");
 
             return user;
@@ -84,7 +84,7 @@ namespace AuthProjectAPI.Repository
             try
             {
                 var user = await _context.Users.FirstOrDefaultAsync(t => t.Id == id);
-                if (user is null)
+                if (user == null)
                     return new ResponseMessage { Message = "User doesn't Exist", StatusCode = StatusCodes.Status404NotFound };
 
                 _context.Users.Remove(user);
@@ -102,7 +102,7 @@ namespace AuthProjectAPI.Repository
             try
             {
                 var user = await _context.Users.FirstOrDefaultAsync(t => t.Id == updateUser.Id);
-                if (user is null)
+                if (user == null)
                     return new ResponseMessage { Message = "Email doesn't Exist", StatusCode = StatusCodes.Status404NotFound };
 
                 user.FirstName = updateUser.FirstName;
@@ -119,12 +119,12 @@ namespace AuthProjectAPI.Repository
             }
         }
 
-        public async Task<ResponseMessage> ResetPassowrdAsync(ResetPassword resetPassword)
+        public async Task<ResponseMessage> ResetPasswordAsync(ResetPassword resetPassword)
         {
             try
             {
                 var user = await _context.Users.FirstOrDefaultAsync(a => a.Email == resetPassword.Email);
-                if (user is null)
+                if (user == null)
                     return new ResponseMessage { Message = "Email doesn't Exist", StatusCode = StatusCodes.Status404NotFound };
 
                 user.Password = PasswordHasher.HashPassowrd(resetPassword.NewPassword);
@@ -137,5 +137,7 @@ namespace AuthProjectAPI.Repository
                 throw;
             }
         }
+
+       
     }
 }

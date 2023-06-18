@@ -1,15 +1,9 @@
 ﻿using AuthProject.Application.DTOs;
 using AuthProject.Application.Interface;
 using AuthProject.Domain;
-using AuthProjectAPI.Context;
 using AuthProjectAPI.Helpers;
-using AuthProjectAPI.Repository;
-using Azure;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
 
 namespace AuthProjectAPI.Controllers
 {
@@ -24,9 +18,9 @@ namespace AuthProjectAPI.Controllers
 
         public UserController(IUserService userService, ILogger<UserController> logger, ITokenManager tokenManager)
         {
-            _userService = userService;
-            _logger = logger;
-            _tokenManager = tokenManager;
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _tokenManager = tokenManager ?? throw new ArgumentNullException(nameof(tokenManager));
         }
 
 
@@ -39,7 +33,7 @@ namespace AuthProjectAPI.Controllers
             {
                 var userResult = await _userService.AuthenticateAsync(authUser);
 
-                if (userResult is not null)
+                if (userResult != null)
                 {
                     userResult.Token = _tokenManager.CreateJWT(userResult);
                     return Ok(new { Message = "User Authenticated!", Token = userResult.Token, StatusCode = StatusCodes.Status200OK });
@@ -130,12 +124,12 @@ namespace AuthProjectAPI.Controllers
 
 
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassowrdAsync([FromBody] ResetPassword resetPassword)
+        public async Task<IActionResult> ResetPassowordAsync([FromBody] ResetPassword resetPassword)
         {
             try
             {
                 ArgumentNullException.ThrowIfNull(resetPassword, nameof(resetPassword));
-                var response = await _userService.ResetPassowrdAsync(resetPassword);
+                var response = await _userService.ResetPasswordAsync(resetPassword);
                 return Ok(response);
             }
             catch (Exception ex)

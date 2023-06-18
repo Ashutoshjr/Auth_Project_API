@@ -16,7 +16,7 @@ namespace AuthProject.Domain.Repositories
 
         Task<ResponseMessage> RegisterAsync(User user);
 
-        Task<ResponseMessage> ResetPassowrdAsync(ResetPassword resetPasswordDto);
+        Task<ResponseMessage> ResetPasswordAsync(ResetPassword resetPasswordDto);
 
     }
 }

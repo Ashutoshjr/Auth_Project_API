@@ -16,6 +16,6 @@ namespace AuthProject.Application.Interface
 
         Task<ResponseMessage> RegisterAsync(RegisterUserDto user);
 
-        Task<ResponseMessage> ResetPassowrdAsync(ResetPassword resetPasswordDto);
+        Task<ResponseMessage> ResetPasswordAsync(ResetPassword resetPasswordDto);
     }
 }

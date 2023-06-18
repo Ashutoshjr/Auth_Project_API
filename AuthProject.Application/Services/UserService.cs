@@ -14,6 +14,7 @@ namespace AuthProject.Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        
 
         public UserService(IUserRepository userRepository, IMapper mapper)
         {
@@ -45,9 +46,9 @@ namespace AuthProject.Application.Services
             return userResponse;
         }
 
-        public async Task<ResponseMessage> ResetPassowrdAsync(ResetPassword resetPassword)
+        public async Task<ResponseMessage> ResetPasswordAsync(ResetPassword resetPassword)
         {
-            var responseData = await _userRepository.ResetPassowrdAsync(resetPassword);
+            var responseData = await _userRepository.ResetPasswordAsync(resetPassword);
             return responseData;
 
         }
