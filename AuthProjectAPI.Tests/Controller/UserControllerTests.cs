@@ -77,5 +77,6 @@ namespace AuthProjectAPI.Tests.Controller
             okObjectResult.Value.Should().BeEquivalentTo(expectedResponse);
         }
 
+
     }
 }
