@@ -14,7 +14,7 @@ namespace AuthProject.Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        
+
 
         public UserService(IUserRepository userRepository, IMapper mapper)
         {

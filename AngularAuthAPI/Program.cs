@@ -29,8 +29,8 @@ var builder = WebApplication.CreateBuilder(args);
         option.EnableForHttps = true;
     });
 
+    builder.Services.AddSingleton<ITokenManager, TokenManager>();
     builder.Services.AddScoped<IUserRepository, UserRepository>();
-    builder.Services.AddScoped<ITokenManager, TokenManager>();
     builder.Services.AddScoped<IUserService, UserService>();
 
 }

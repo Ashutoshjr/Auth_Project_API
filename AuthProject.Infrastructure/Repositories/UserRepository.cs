@@ -10,10 +10,11 @@ using System.Security.Cryptography;
 
 namespace AuthProjectAPI.Repository
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : IUserRepository, IDisposable
     {
 
         private readonly AppDbContext _context;
+        private bool disposed = false;
 
         public UserRepository(AppDbContext appDbContext)
         {
@@ -138,6 +139,32 @@ namespace AuthProjectAPI.Repository
             }
         }
 
-       
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+                return;
+
+            if (disposing)
+            {
+                // Dispose managed resources here
+                _context.Dispose();
+                // Dispose any other managed resources if necessary
+            }
+
+            // Dispose unmanaged resources here
+
+            disposed = true;
+        }
+
+        ~UserRepository()
+        {
+            Dispose(false);
+        }
     }
 }
