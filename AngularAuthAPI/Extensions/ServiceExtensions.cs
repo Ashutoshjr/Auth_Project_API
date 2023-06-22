@@ -2,6 +2,8 @@
 using AuthProjectAPI.Context;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -61,6 +63,21 @@ namespace AuthProjectAPI.Extensions
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
 
+        }
+
+
+        public static void ConfigureApiVersioning(this IServiceCollection services)
+        {
+
+            services.AddApiVersioning(options =>
+            {
+                // Specify the default API version
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.AssumeDefaultVersionWhenUnspecified = true;
+
+                // Specify the API versioning scheme
+                options.ApiVersionReader = new HeaderApiVersionReader("api-version");
+            });
         }
     }
 }

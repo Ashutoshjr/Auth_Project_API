@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AuthProjectAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -39,8 +40,7 @@ namespace AuthProjectAPI.Controllers
                     return Ok(new { Message = "User Authenticated!", Token = userResult.Token, StatusCode = StatusCodes.Status200OK });
                 }
 
-                return BadRequest(new { Message = "User not found!", Token = "" });
-
+                return NotFound(new { Message = "User not found!", Token = "" });
             }
             catch (Exception ex)
             {

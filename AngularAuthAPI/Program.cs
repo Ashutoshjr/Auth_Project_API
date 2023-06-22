@@ -21,6 +21,8 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddSwaggerGen();
     builder.Services.ConfigureCors();
     builder.Services.ConfigureAutoMapper();
+    builder.Services.ConfigureApiVersioning();
+
     builder.Services.AddAppDbContext(builder.Configuration);
 
     builder.Services.AddJwtAuthentication(builder.Configuration);
