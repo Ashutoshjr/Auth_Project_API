@@ -6,7 +6,9 @@ namespace AuthProject.Infrastructure.Helper
 {
     public class PasswordHasher
     {
-        private static RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+
+        //private static RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+        private static RandomNumberGenerator rng = RandomNumberGenerator.Create();
         private static int SaltSize = 16;
         private static int HashSize = 20;
         private static int Iterations = 10000;
